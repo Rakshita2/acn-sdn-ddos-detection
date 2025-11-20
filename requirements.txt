@@ -1,2 +1,5 @@
 ryu
 mininet
+scikit-learn
+pandas
+matplotlib
