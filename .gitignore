@@ -1,5 +1,6 @@
 .venv/
 venv/
+ryu-env/
 *.joblib
 *.pyc
 __pycache__/

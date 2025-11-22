@@ -26,7 +26,7 @@ class SimpleMonitor13(switch.SimpleSwitch13):
         model_path = "trained_flow_model.joblib"
         dataset_path = 'dataset/FlowStatsfile.csv'
         dataset_name = os.path.basename(dataset_path)
-        desired_model_type = 'RF'
+        desired_model_type = 'NB'
         
         if os.path.exists(model_path):
             self.logger.info("Checking if saved model matches desired model type and dataset...")
