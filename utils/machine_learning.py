@@ -183,38 +183,6 @@ class MachineLearning():
             # Backward compatibility: treat loaded data as the model itself
             self.flow_model = data
             print(f"Model loaded from {filepath} (legacy format)")
-
-    # Legacy methods for backward compatibility
-    def LR(self):
-        self.train_model('LR')
-        
-    def KNN(self):
-        self.train_model('KNN')
- 
-    def SVM(self):
-        self.train_model('SVM')
-        
-    def NB(self):
-        self.train_model('NB')
-        
-        
-    def DT(self):
-        self.train_model('DT')
-        
-    def RF(self):
-        self.train_model('RF')
-    
-    def GB(self):
-        self.train_model('GB')
-    
-    def AB(self):
-        self.train_model('AB')
-    
-    def BC(self):
-        self.train_model('BC')
-    
-    def VC(self):
-        self.train_model('VC')
         
     def Confusion_matrix(self):
         self.evaluate_model()
