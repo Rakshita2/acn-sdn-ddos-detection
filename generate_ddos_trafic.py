@@ -150,7 +150,7 @@ def startNetwork():
         print("Performing ICMP (Ping) Flood")  
         print("--------------------------------------------------------------------------------")   
         src.cmd("timeout 20s hping3 -1 -V -d 120 -w 64 -p 80 --rand-source --flood {}".format(dst))  
-        sleep(100)
+        sleep(15)
             
         src = choice(hosts)
         dst = ip_generator()   
@@ -158,7 +158,7 @@ def startNetwork():
         print("Performing UDP Flood")  
         print("--------------------------------------------------------------------------------")   
         src.cmd("timeout 20s hping3 -2 -V -d 120 -w 64 --rand-source --flood {}".format(dst))    
-        sleep(100)
+        sleep(15)
         
         src = choice(hosts)
         dst = ip_generator()    
@@ -166,7 +166,7 @@ def startNetwork():
         print("Performing TCP-SYN Flood")  
         print("--------------------------------------------------------------------------------")
         src.cmd('timeout 20s hping3 -S -V -d 120 -w 64 -p 80 --rand-source --flood 10.0.0.1')
-        sleep(100)
+        sleep(15)
         
         src = choice(hosts)
         dst = ip_generator()   
@@ -174,7 +174,7 @@ def startNetwork():
         print("Performing LAND Attack")  
         print("--------------------------------------------------------------------------------")   
         src.cmd("timeout 20s hping3 -1 -V -d 120 -w 64 --flood -a {} {}".format(dst,dst))
-        sleep(100)  
+        sleep(15)  
         print("--------------------------------------------------------------------------------")
     finally:
         cleanup()

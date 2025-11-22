@@ -8,7 +8,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, AdaBoostClassifier, VotingClassifier, BaggingClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 import argparse
@@ -52,17 +52,25 @@ class MachineLearning():
         self.X_flow_train, self.X_flow_test, self.y_flow_train, self.y_flow_test = train_test_split(
             self.X_flow, self.y_flow, test_size=0.25, random_state=0)
 
-    def train_model(self, model_type='RF'):
+    def train_model(self, model_type='RF', n_jobs=10):
         if self.X_flow_train is None:
             raise ValueError("Dataset not loaded. Call load_dataset first.")
         
         model_map = {
-            'LR': LogisticRegression(solver='liblinear', random_state=0),
-            'KNN': KNeighborsClassifier(n_neighbors=5, metric='minkowski', p=2),
-            'SVM': SVC(kernel='rbf', random_state=0),
+            'LR': LogisticRegression(solver='liblinear', random_state=0, verbose=1, n_jobs=n_jobs),
+            'KNN': KNeighborsClassifier(n_neighbors=5, metric='minkowski', p=2, n_jobs=n_jobs),
+            'SVM': SVC(kernel='rbf', random_state=0, verbose=1),
             'NB': GaussianNB(),
             'DT': DecisionTreeClassifier(criterion='entropy', random_state=0),
-            'RF': RandomForestClassifier(n_estimators=10, criterion="entropy", random_state=0)
+            'RF': RandomForestClassifier(n_estimators=10, criterion="entropy", random_state=0, verbose=1, n_jobs=n_jobs),
+            'GB': GradientBoostingClassifier(n_estimators=10, random_state=0, verbose=1),
+            'AB': AdaBoostClassifier(n_estimators=10, random_state=0),
+            'BC': BaggingClassifier(n_estimators=10, random_state=0, verbose=1, n_jobs=n_jobs),
+            'VC': VotingClassifier(estimators=[
+                ('lr', LogisticRegression(solver='liblinear', random_state=0, verbose=1, n_jobs=n_jobs)),
+                ('dt', DecisionTreeClassifier(criterion='entropy', random_state=0)),
+                ('rf', RandomForestClassifier(n_estimators=10, criterion="entropy", random_state=0, verbose=1, n_jobs=n_jobs))
+            ], voting='hard')
         }
         
         if model_type not in model_map:
@@ -195,6 +203,18 @@ class MachineLearning():
         
     def RF(self):
         self.train_model('RF')
+    
+    def GB(self):
+        self.train_model('GB')
+    
+    def AB(self):
+        self.train_model('AB')
+    
+    def BC(self):
+        self.train_model('BC')
+    
+    def VC(self):
+        self.train_model('VC')
         
     def Confusion_matrix(self):
         self.evaluate_model()
@@ -204,7 +224,7 @@ class MachineLearning():
         Train and evaluate a set of models, collect metrics (accuracy, sensitivity, specificity),
         and show comparison plots.
 
-        model_types: list of model codes to evaluate (e.g. ['LR','KNN','SVM','NB','DT','RF']).
+        model_types: list of model codes to evaluate (e.g. ['LR','KNN','SVM','NB','DT','RF','GB','AB','BC','VC']).
         show_confusion_grid: if True, show a grid of confusion matrices for each model.
 
         Assumes a binary classification problem (labels 0 and 1). For multiclass problems,
@@ -214,7 +234,7 @@ class MachineLearning():
             raise ValueError("Dataset not loaded. Call load_dataset first.")
 
         if model_types is None:
-            model_types = ['LR', 'KNN', 'SVM', 'NB', 'DT', 'RF']
+            model_types = ['LR', 'KNN', 'SVM', 'NB', 'DT', 'RF', 'GB', 'AB', 'BC', 'VC']
 
         results = []
 
